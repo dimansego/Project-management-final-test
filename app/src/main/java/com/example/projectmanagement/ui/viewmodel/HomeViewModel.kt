@@ -1,0 +1,134 @@
+package com.example.projectmanagement.ui.viewmodel
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.example.projectmanagement.data.model.Project
+import com.example.projectmanagement.data.model.Task
+import com.example.projectmanagement.data.model.TaskStatus
+import com.example.projectmanagement.data.repository.ProjectRepository
+
+data class ProjectUi(
+    val project: Project,
+    val progress: Int, // 0-100
+    val memberCount: Int,
+    val taskCount: Int
+)
+
+data class TaskUi(
+    val task: Task,
+    val projectTitle: String
+)
+
+class HomeViewModel(
+    private val projectRepository: ProjectRepository
+) : ViewModel() {
+    
+    private val _currentUserName = MutableLiveData<String>()
+    val currentUserName: LiveData<String> = _currentUserName
+    
+    private val _tasksToCompleteCount = MediatorLiveData<Int>()
+    val tasksToCompleteCount: LiveData<Int> = _tasksToCompleteCount
+    
+    private val _projects = MediatorLiveData<List<ProjectUi>>()
+    val projects: LiveData<List<ProjectUi>> = _projects
+    
+    private val _tasks = MediatorLiveData<List<TaskUi>>()
+    val tasks: LiveData<List<TaskUi>> = _tasks
+    
+    private val _todayTaskCount = MediatorLiveData<Int>()
+    val todayTaskCount: LiveData<Int> = _todayTaskCount
+    
+    private val _inProgressTaskCount = MediatorLiveData<Int>()
+    val inProgressTaskCount: LiveData<Int> = _inProgressTaskCount
+    
+    private val allProjectsLiveData = projectRepository.getAllProjects()
+    private val allTasksLiveData = projectRepository.getAllTasks()
+    
+    init {
+        loadCurrentUser()
+        setupProjects()
+        setupTasks()
+        setupCounts()
+    }
+    
+    private fun loadCurrentUser() {
+        val user = com.example.projectmanagement.data.repository.SessionManager.getCurrentUser()
+        _currentUserName.value = user?.name ?: "Guest"
+    }
+    
+    private fun setupProjects() {
+        fun updateProjects() {
+            val allProjects = allProjectsLiveData.value ?: emptyList()
+            val allTasks = allTasksLiveData.value ?: emptyList()
+            
+            val projectsUi = allProjects.map { project ->
+                val projectTasks = allTasks.filter { it.projectId == project.id }
+                val completedTasks = projectTasks.count { it.status == TaskStatus.DONE }
+                val progress = if (projectTasks.isEmpty()) 0 else (completedTasks * 100 / projectTasks.size)
+                
+                ProjectUi(
+                    project = project,
+                    progress = progress,
+                    memberCount = projectTasks.map { it.assigneeName }.distinct().size,
+                    taskCount = projectTasks.size
+                )
+            }
+            _projects.value = projectsUi
+        }
+        
+        _projects.addSource(allProjectsLiveData) { updateProjects() }
+        _projects.addSource(allTasksLiveData) { updateProjects() }
+    }
+    
+    private fun setupTasks() {
+        // Only show "In Progress" tasks
+        _tasks.addSource(allTasksLiveData) { allTasks ->
+            val inProgressTasks = allTasks.filter { it.status == TaskStatus.DOING }
+            val allProjects = allProjectsLiveData.value ?: emptyList()
+            
+            val tasksUi = inProgressTasks.map { task ->
+                val project = allProjects.find { it.id == task.projectId }
+                TaskUi(
+                    task = task,
+                    projectTitle = project?.title ?: ""
+                )
+            }
+            _tasks.value = tasksUi
+        }
+        
+        // Also update when projects change to refresh project titles
+        _tasks.addSource(allProjectsLiveData) {
+            val allTasks = allTasksLiveData.value ?: emptyList()
+            val inProgressTasks = allTasks.filter { it.status == TaskStatus.DOING }
+            
+            val tasksUi = inProgressTasks.map { task ->
+                val project = it.find { p -> p.id == task.projectId }
+                TaskUi(
+                    task = task,
+                    projectTitle = project?.title ?: ""
+                )
+            }
+            _tasks.value = tasksUi
+        }
+    }
+    
+    private fun setupCounts() {
+        _tasksToCompleteCount.addSource(allTasksLiveData) { allTasks ->
+            val incompleteTasks = allTasks.filter { it.status != TaskStatus.DONE }
+            _tasksToCompleteCount.value = incompleteTasks.size
+        }
+        
+        _todayTaskCount.addSource(allTasksLiveData) { allTasks ->
+            _todayTaskCount.value = allTasks.size
+        }
+        
+        _inProgressTaskCount.addSource(allTasksLiveData) { allTasks ->
+            val inProgressTasks = allTasks.filter { it.status == TaskStatus.DOING }
+            _inProgressTaskCount.value = inProgressTasks.size
+        }
+    }
+}
+
+
