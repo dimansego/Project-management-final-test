@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-        <variable
-            name="taskUi"
-            type="com.example.projectmanagement.ui.home.TaskUi" />
-    </data>
-
-    <com.google.android.material.card.MaterialCardView
+    xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -26,7 +19,6 @@
                 android:id="@+id/taskTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{taskUi.task.title}"
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -40,7 +32,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="@{taskUi.projectTitle}"
                 android:textColor="#666666"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +44,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@{taskUi != null &amp;&amp; taskUi.task != null ? @string/deadline_label(taskUi.task.deadline) : ``}"
                 android:textColor="#999999"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -61,5 +51,4 @@
                 tools:text="Deadline: 2024-01-15" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
-</layout>
+</com.google.android.material.card.MaterialCardView>

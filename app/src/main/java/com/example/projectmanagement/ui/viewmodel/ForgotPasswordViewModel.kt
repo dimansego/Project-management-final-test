@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class ForgotPasswordViewModel : ViewModel() {
+    
     val email = MutableLiveData<String>()
     
     private val _emailError = MutableLiveData<String?>()
@@ -16,14 +17,8 @@ class ForgotPasswordViewModel : ViewModel() {
     fun sendResetLink() {
         val emailValue = email.value?.trim() ?: ""
         
-        if (emailValue.isEmpty()) {
-            _emailError.value = "Email is required"
+        if (!isEntryValid(emailValue)) {
             return
-        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailValue).matches()) {
-            _emailError.value = "Invalid email format"
-            return
-        } else {
-            _emailError.value = null
         }
         
         // Fake: just show success message
@@ -33,7 +28,25 @@ class ForgotPasswordViewModel : ViewModel() {
     fun clearErrors() {
         _emailError.value = null
     }
+    
+    fun setEmail(emailValue: String) {
+        email.value = emailValue
+    }
+    
+    private fun isEntryValid(emailValue: String): Boolean {
+        return when {
+            emailValue.isEmpty() -> {
+                _emailError.value = "Email is required"
+                false
+            }
+            !android.util.Patterns.EMAIL_ADDRESS.matcher(emailValue).matches() -> {
+                _emailError.value = "Invalid email format"
+                false
+            }
+            else -> {
+                _emailError.value = null
+                true
+            }
+        }
+    }
 }
-
-
-

@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-        <import type="com.example.projectmanagement.data.model.TaskStatus" />
-        <import type="com.example.projectmanagement.data.model.TaskPriority" />
-        <variable
-            name="viewModel"
-            type="com.example.projectmanagement.ui.createedittask.CreateEditTaskViewModel" />
-    </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp"
@@ -35,13 +26,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Title"
-                    app:errorText="@{viewModel.titleError}">
+>
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/titleEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={viewModel.title}" />
+ />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -57,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="textMultiLine"
                         android:lines="4"
-                        android:text="@={viewModel.description}" />
+ />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -100,7 +91,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="date"
-                        android:text="@={viewModel.deadline}" />
+ />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -115,7 +106,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
-                        android:text="@={viewModel.assigneeName}" />
+ />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -130,6 +121,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -2,13 +2,13 @@ package com.example.projectmanagement.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectmanagement.R
 import com.example.projectmanagement.databinding.ItemAddProjectBinding
 import com.example.projectmanagement.databinding.ItemProjectCardBinding
+import com.example.projectmanagement.ui.viewmodel.ProjectUi
 
 class ProjectsAdapter(
     private val onItemClick: (ProjectUi) -> Unit,
@@ -34,18 +34,16 @@ class ProjectsAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_ADD -> {
-                val binding = DataBindingUtil.inflate<ItemAddProjectBinding>(
+                val binding = ItemAddProjectBinding.inflate(
                     LayoutInflater.from(parent.context),
-                    R.layout.item_add_project,
                     parent,
                     false
                 )
                 AddProjectViewHolder(binding, onAddClick)
             }
             else -> {
-                val binding = DataBindingUtil.inflate<ItemProjectCardBinding>(
+                val binding = ItemProjectCardBinding.inflate(
                     LayoutInflater.from(parent.context),
-                    R.layout.item_project_card,
                     parent,
                     false
                 )
@@ -69,8 +67,10 @@ class ProjectsAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         
         fun bind(projectUi: ProjectUi) {
-            binding.projectUi = projectUi
-            binding.executePendingBindings()
+            binding.projectTitle.text = projectUi.project.title
+            binding.unfinishedTasks.text = "There are ${projectUi.taskCount} unfinished tasks"
+            binding.progressCircle.progress = projectUi.progress
+            binding.progressText.text = "${projectUi.progress}%"
             binding.root.setOnClickListener {
                 onItemClick(projectUi)
             }

@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-        <variable
-            name="meeting"
-            type="com.example.projectmanagement.ui.meetings.Meeting" />
-    </data>
-
-    <com.google.android.material.card.MaterialCardView
+    xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -26,7 +19,6 @@
                 android:id="@+id/titleTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{meeting.title}"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:text="Sprint Planning" />
@@ -36,7 +28,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@{@string/meeting_datetime(meeting.date, meeting.time)}"
                 android:textSize="14sp"
                 tools:text="2024-02-01 at 10:00 AM" />
 
@@ -45,10 +36,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@{@string/meeting_participants(meeting.participants)}"
                 android:textSize="14sp"
                 tools:text="Participants: Team A, Team B" />
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-</layout>
+</com.google.android.material.card.MaterialCardView>
 

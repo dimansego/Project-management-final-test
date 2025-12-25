@@ -7,9 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.projectmanagement"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.projectmanagement"
@@ -39,7 +37,8 @@ android {
     }
 
     buildFeatures {
-        dataBinding = true
+        viewBinding = true
+        dataBinding = false
     }
 
 }

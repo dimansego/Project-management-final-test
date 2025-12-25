@@ -18,15 +18,12 @@ class ProfileViewModel : ViewModel() {
         loadCurrentUser()
     }
     
-    private fun loadCurrentUser() {
-        _currentUser.value = SessionManager.getCurrentUser()
-    }
-    
     fun logout() {
         SessionManager.clearSession()
         _logoutSuccess.value = true
     }
+    
+    private fun loadCurrentUser() {
+        _currentUser.value = SessionManager.getCurrentUser()
+    }
 }
-
-
-

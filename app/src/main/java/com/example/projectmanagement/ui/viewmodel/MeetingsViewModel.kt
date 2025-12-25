@@ -13,6 +13,7 @@ data class Meeting(
 )
 
 class MeetingsViewModel : ViewModel() {
+    
     private val _meetings = MutableLiveData<List<Meeting>>()
     val meetings: LiveData<List<Meeting>> = _meetings
     
@@ -30,6 +31,3 @@ class MeetingsViewModel : ViewModel() {
         _meetings.value = fakeMeetings
     }
 }
-
-
-

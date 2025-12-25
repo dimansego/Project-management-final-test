@@ -1,24 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-        <variable
-            name="viewModel"
-            type="com.example.projectmanagement.ui.viewmodel.HomeViewModel" />
-    </data>
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FAFAFA"
-        android:fillViewport="true">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    android:padding="16dp">
 
             <!-- Header Row -->
             <ImageView
@@ -44,7 +32,6 @@
                     android:id="@+id/greetingText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{@string/hello_user(viewModel.currentUserName)}"
                     android:textColor="#333333"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -55,7 +42,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="@{@string/tasks_to_complete(viewModel.tasksToCompleteCount)}"
                     android:textColor="#666666"
                     android:textSize="14sp"
                     tools:text="You have 6 tasks to complete" />
@@ -98,9 +84,9 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/todayTaskCountText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{String.valueOf(viewModel.todayTaskCount)}"
                         android:textColor="#9C27B0"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -149,9 +135,9 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/inProgressTaskCountText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{String.valueOf(viewModel.inProgressTaskCount)}"
                         android:textColor="#2196F3"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -295,6 +281,4 @@
                 app:layout_constraintTop_toBottomOf="@id/dateSelector"
                 tools:listitem="@layout/item_task_card" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,7 +2,6 @@ package com.example.projectmanagement.ui.projectdetail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -15,9 +14,8 @@ class TasksAdapter(
 ) : ListAdapter<Task, TasksAdapter.TaskViewHolder>(TaskDiffCallback()) {
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        val binding = DataBindingUtil.inflate<ItemTaskBinding>(
+        val binding = ItemTaskBinding.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.item_task,
             parent,
             false
         )
@@ -34,8 +32,15 @@ class TasksAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         
         fun bind(task: Task) {
-            binding.task = task
-            binding.executePendingBindings()
+            binding.titleTextView.text = task.title
+            binding.descriptionTextView.text = task.description
+            binding.statusChip.text = task.status.toString()
+            binding.priorityTextView.text = task.priority.toString()
+            binding.assigneeTextView.text = task.assigneeName
+            binding.deadlineTextView.text = binding.root.context.getString(
+                com.example.projectmanagement.R.string.deadline_label,
+                task.deadline
+            )
             binding.root.setOnClickListener {
                 onItemClick(task)
             }

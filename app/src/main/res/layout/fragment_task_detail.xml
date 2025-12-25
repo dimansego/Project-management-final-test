@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-        <variable
-            name="viewModel"
-            type="com.example.projectmanagement.ui.taskdetail.TaskDetailViewModel" />
-    </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp"
@@ -35,7 +28,6 @@
                     android:id="@+id/titleTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.task.title}"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     tools:text="Design UI Mockups" />
@@ -45,7 +37,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="@{viewModel.task.status.toString()}"
                     tools:text="DONE" />
 
                 <TextView
@@ -53,7 +44,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="@{viewModel.task.description}"
                     android:textSize="14sp"
                     tools:text="Create wireframes and mockups for main screens" />
 
@@ -73,7 +63,6 @@
                         android:id="@+id/priorityTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{viewModel.task.priority.toString()}"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         tools:text="HIGH" />
@@ -95,7 +84,6 @@
                         android:id="@+id/assigneeTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{viewModel.task.assigneeName}"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         tools:text="Test User" />
@@ -106,7 +94,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="@{viewModel.task != null ? @string/deadline_label(viewModel.task.deadline) : ``}"
                     android:textSize="14sp"
                     tools:text="Deadline: 2024-01-15" />
             </LinearLayout>
@@ -117,7 +104,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:isVisible="@{viewModel.taskState instanceof com.example.projectmanagement.ui.common.UiState.Loading}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -128,7 +114,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:isVisible="@{viewModel.taskState instanceof com.example.projectmanagement.ui.common.UiState.Error}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -146,6 +131,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/taskCard" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 

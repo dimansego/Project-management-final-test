@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -15,21 +14,18 @@ import com.example.projectmanagement.data.repository.ProjectRepository
 import com.example.projectmanagement.databinding.FragmentTaskDetailBinding
 import com.example.projectmanagement.ui.common.UiState
 import com.example.projectmanagement.ui.viewmodel.TaskDetailViewModel
+import com.example.projectmanagement.ui.viewmodel.TaskDetailViewModelFactory
 
 class TaskDetailFragment : Fragment() {
-    private lateinit var binding: FragmentTaskDetailBinding
+    private var _binding: FragmentTaskDetailBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: TaskDetailViewModel by viewModels {
-        object : androidx.lifecycle.ViewModelProvider.Factory {
-            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-                @Suppress("UNCHECKED_CAST")
-                return TaskDetailViewModel(
-                    ProjectRepository(
-                        (activity?.application as ProjectApplication).database.projectDao(),
-                        (activity?.application as ProjectApplication).database.taskDao()
-                    )
-                ) as T
-            }
-        }
+        TaskDetailViewModelFactory(
+            ProjectRepository(
+                (activity?.application as ProjectApplication).database.projectDao(),
+                (activity?.application as ProjectApplication).database.taskDao()
+            )
+        )
     }
     
     override fun onCreateView(
@@ -37,10 +33,13 @@ class TaskDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task_detail, container, false)
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+        _binding = FragmentTaskDetailBinding.inflate(inflater, container, false)
         return binding.root
+    }
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,13 +53,34 @@ class TaskDetailFragment : Fragment() {
             findNavController().navigate(action)
         }
         
+        // Observe task data and update UI
+        viewModel.task.observe(viewLifecycleOwner) { task ->
+            task?.let {
+                binding.titleTextView.text = it.title
+                binding.descriptionTextView.text = it.description
+                binding.statusChip.text = it.status.toString()
+                binding.priorityTextView.text = it.priority.toString()
+                binding.assigneeTextView.text = it.assigneeName
+                binding.deadlineTextView.text = getString(R.string.deadline_label, it.deadline)
+            }
+        }
+        
+        // Observe task state for loading and error
         viewModel.taskState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
+                is UiState.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.errorTextView.visibility = View.GONE
+                }
                 is UiState.Error -> {
                     binding.errorTextView.text = state.message
                     binding.errorTextView.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
                 }
-                else -> {}
+                is UiState.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.errorTextView.visibility = View.GONE
+                }
             }
         })
     }

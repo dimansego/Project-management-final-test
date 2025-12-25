@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -15,13 +14,14 @@ import com.example.projectmanagement.R
 import com.example.projectmanagement.data.repository.AuthRepository
 import com.example.projectmanagement.databinding.FragmentRegisterBinding
 import com.example.projectmanagement.ui.common.UiState
-import com.example.projectmanagement.ui.viewmodel.AuthViewModelFactory
 import com.example.projectmanagement.ui.viewmodel.RegisterViewModel
+import com.example.projectmanagement.ui.viewmodel.RegisterViewModelFactory
 
 class RegisterFragment : Fragment() {
-    private lateinit var binding: FragmentRegisterBinding
+    private var _binding: FragmentRegisterBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: RegisterViewModel by activityViewModels {
-        AuthViewModelFactory(
+        RegisterViewModelFactory(
             AuthRepository(
                 (activity?.application as ProjectApplication).database.userDao()
             )
@@ -33,14 +33,75 @@ class RegisterFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false)
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
+    }
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
+        // Set up two-way binding for form fields
+        binding.nameEditText.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.setName(s?.toString() ?: "")
+                viewModel.clearErrors()
+            }
+            override fun afterTextChanged(s: android.text.Editable?) {}
+        })
+        
+        binding.emailEditText.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.setEmail(s?.toString() ?: "")
+                viewModel.clearErrors()
+            }
+            override fun afterTextChanged(s: android.text.Editable?) {}
+        })
+        
+        binding.passwordEditText.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.setPassword(s?.toString() ?: "")
+                viewModel.clearErrors()
+            }
+            override fun afterTextChanged(s: android.text.Editable?) {}
+        })
+        
+        binding.confirmPasswordEditText.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.setConfirmPassword(s?.toString() ?: "")
+                viewModel.clearErrors()
+            }
+            override fun afterTextChanged(s: android.text.Editable?) {}
+        })
+        
+        // Observe error states
+        viewModel.nameError.observe(viewLifecycleOwner) { error ->
+            binding.nameInputLayout.error = error
+            binding.nameInputLayout.isErrorEnabled = error != null
+        }
+        
+        viewModel.emailError.observe(viewLifecycleOwner) { error ->
+            binding.emailInputLayout.error = error
+            binding.emailInputLayout.isErrorEnabled = error != null
+        }
+        
+        viewModel.passwordError.observe(viewLifecycleOwner) { error ->
+            binding.passwordInputLayout.error = error
+            binding.passwordInputLayout.isErrorEnabled = error != null
+        }
+        
+        viewModel.confirmPasswordError.observe(viewLifecycleOwner) { error ->
+            binding.confirmPasswordInputLayout.error = error
+            binding.confirmPasswordInputLayout.isErrorEnabled = error != null
+        }
         
         binding.registerButton.setOnClickListener {
             viewModel.register()
@@ -55,25 +116,14 @@ class RegisterFragment : Fragment() {
                 is UiState.Error -> {
                     Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
                 }
-                else -> {}
+                is UiState.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+                else -> {
+                    binding.progressBar.visibility = View.GONE
+                }
             }
         })
-        
-        viewModel.name.observe(viewLifecycleOwner) {
-            viewModel.clearErrors()
-        }
-        
-        viewModel.email.observe(viewLifecycleOwner) {
-            viewModel.clearErrors()
-        }
-        
-        viewModel.password.observe(viewLifecycleOwner) {
-            viewModel.clearErrors()
-        }
-        
-        viewModel.confirmPassword.observe(viewLifecycleOwner) {
-            viewModel.clearErrors()
-        }
     }
 }
 

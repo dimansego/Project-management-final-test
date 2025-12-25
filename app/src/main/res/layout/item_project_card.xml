@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-        <variable
-            name="projectUi"
-            type="com.example.projectmanagement.ui.home.ProjectUi" />
-    </data>
-
-    <com.google.android.material.card.MaterialCardView
+    xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -26,11 +19,10 @@
                 android:id="@+id/projectTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{projectUi.project.title}"
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@id/progressCircle"
+                app:layout_constraintEnd_toStartOf="@+id/progressContainer"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="3D Character Cute Robot" />
@@ -40,10 +32,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="@{projectUi != null ? String.format(`There are %d unfinished tasks`, projectUi.taskCount) : ``}"
                 android:textColor="#666666"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toStartOf="@id/progressCircle"
+                app:layout_constraintEnd_toStartOf="@id/progressContainer"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/projectTitle"
                 tools:text="There are 3 unfinished tasks" />
@@ -120,7 +111,6 @@
                     android:layout_height="48dp"
                     android:indeterminate="false"
                     android:max="100"
-                    android:progress="@{projectUi.progress}"
                     android:progressTint="#9C27B0"
                     android:progressBackgroundTint="#E0E0E0" />
 
@@ -129,7 +119,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@{projectUi != null ? String.format(`%d%%`, projectUi.progress) : ``}"
                     android:textColor="#333333"
                     android:textSize="10sp"
                     android:textStyle="bold"
@@ -137,6 +126,5 @@
             </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
-</layout>
+</com.google.android.material.card.MaterialCardView>
 

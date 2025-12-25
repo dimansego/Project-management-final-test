@@ -19,16 +19,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/projectsFragment"
-        android:name="com.example.projectmanagement.ui.projects.ProjectsFragment"
-        android:label="Projects"
-        tools:layout="@layout/fragment_projects">
-        <action
-            android:id="@+id/action_projectsFragment_to_projectDetailFragment"
-            app:destination="@id/projectDetailFragment" />
-    </fragment>
-
-    <fragment
         android:id="@+id/projectDetailFragment"
         android:name="com.example.projectmanagement.ui.projectdetail.ProjectDetailFragment"
         android:label="Project Details"

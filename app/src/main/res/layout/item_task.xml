@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-        <variable
-            name="task"
-            type="com.example.projectmanagement.data.model.Task" />
-    </data>
-
-    <com.google.android.material.card.MaterialCardView
+    xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -32,7 +25,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@{task.title}"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     tools:text="Design UI Mockups" />
@@ -41,7 +33,6 @@
                     android:id="@+id/statusChip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{task.status.toString()}"
                     tools:text="DONE" />
             </LinearLayout>
 
@@ -50,7 +41,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@{task.description}"
                 android:textSize="14sp"
                 tools:text="Create wireframes and mockups for main screens" />
 
@@ -70,7 +60,6 @@
                     android:id="@+id/priorityTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{task.priority.toString()}"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     tools:text="HIGH" />
@@ -86,7 +75,6 @@
                     android:id="@+id/assigneeTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{task.assigneeName}"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     tools:text="Test User" />
@@ -97,10 +85,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="@{@string/deadline_label(task.deadline)}"
                 android:textSize="12sp"
                 tools:text="Deadline: 2024-01-15" />
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-</layout>
+</com.google.android.material.card.MaterialCardView>
 

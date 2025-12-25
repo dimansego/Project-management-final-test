@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.projectmanagement.data.model.Project
 import com.example.projectmanagement.data.model.Task
 import com.example.projectmanagement.data.model.TaskStatus
@@ -83,7 +84,6 @@ class HomeViewModel(
     }
     
     private fun setupTasks() {
-        // Only show "In Progress" tasks
         _tasks.addSource(allTasksLiveData) { allTasks ->
             val inProgressTasks = allTasks.filter { it.status == TaskStatus.DOING }
             val allProjects = allProjectsLiveData.value ?: emptyList()
@@ -131,5 +131,12 @@ class HomeViewModel(
     }
 }
 
-
-
+class HomeViewModelFactory(private val projectRepository: ProjectRepository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return HomeViewModel(projectRepository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}

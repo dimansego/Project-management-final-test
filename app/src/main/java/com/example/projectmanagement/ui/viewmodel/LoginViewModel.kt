@@ -3,6 +3,7 @@ package com.example.projectmanagement.ui.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.projectmanagement.data.model.User
 import com.example.projectmanagement.data.repository.AuthRepository
@@ -29,26 +30,7 @@ class LoginViewModel(
         val emailValue = email.value?.trim() ?: ""
         val passwordValue = password.value ?: ""
         
-        var hasError = false
-        
-        if (emailValue.isEmpty()) {
-            _emailError.value = "Email is required"
-            hasError = true
-        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailValue).matches()) {
-            _emailError.value = "Invalid email format"
-            hasError = true
-        } else {
-            _emailError.value = null
-        }
-        
-        if (passwordValue.isEmpty()) {
-            _passwordError.value = "Password is required"
-            hasError = true
-        } else {
-            _passwordError.value = null
-        }
-        
-        if (hasError) {
+        if (!isEntryValid(emailValue, passwordValue)) {
             return
         }
         
@@ -72,7 +54,49 @@ class LoginViewModel(
         _emailError.value = null
         _passwordError.value = null
     }
+    
+    fun setEmail(emailValue: String) {
+        email.value = emailValue
+    }
+    
+    fun setPassword(passwordValue: String) {
+        password.value = passwordValue
+    }
+    
+    private fun isEntryValid(emailValue: String, passwordValue: String): Boolean {
+        val isValidEmail = when {
+            emailValue.isEmpty() -> {
+                _emailError.value = "Email is required"
+                false
+            }
+            !android.util.Patterns.EMAIL_ADDRESS.matcher(emailValue).matches() -> {
+                _emailError.value = "Invalid email format"
+                false
+            }
+            else -> {
+                _emailError.value = null
+                true
+            }
+        }
+        
+        val isValidPassword = if (passwordValue.isEmpty()) {
+            _passwordError.value = "Password is required"
+            false
+        } else {
+            _passwordError.value = null
+            true
+        }
+        
+        return isValidEmail && isValidPassword
+    }
 }
 
-
-
+class LoginViewModelFactory(private val authRepository: AuthRepository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return LoginViewModel(authRepository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}

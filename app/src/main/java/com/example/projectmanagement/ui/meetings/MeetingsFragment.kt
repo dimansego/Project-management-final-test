@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -14,7 +13,8 @@ import com.example.projectmanagement.databinding.FragmentMeetingsBinding
 import com.example.projectmanagement.ui.viewmodel.MeetingsViewModel
 
 class MeetingsFragment : Fragment() {
-    private lateinit var binding: FragmentMeetingsBinding
+    private var _binding: FragmentMeetingsBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: MeetingsViewModel by viewModels()
     private lateinit var adapter: MeetingsAdapter
     
@@ -23,10 +23,13 @@ class MeetingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_meetings, container, false)
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+        _binding = FragmentMeetingsBinding.inflate(inflater, container, false)
         return binding.root
+    }
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
